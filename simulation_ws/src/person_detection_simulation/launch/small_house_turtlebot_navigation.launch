@@ -18,7 +18,7 @@
   <arg name="gui" default="false"/>
 
   <!-- World and Robot -->
-  <include file="$(find aws_robomaker_simulation_small_house)/launch/small_house_turtlebot_navigation.launch">
+  <include file="$(find aws_robomaker_small_house_world)/launch/small_house_turtlebot_navigation.launch">
     <arg name="gui" value="$(arg gui)"/>
     <arg name="x_pos" value="3.5"/>
     <arg name="y_pos" value="1.0"/>
