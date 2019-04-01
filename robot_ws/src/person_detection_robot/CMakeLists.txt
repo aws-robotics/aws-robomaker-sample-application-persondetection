@@ -15,9 +15,6 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   message_generation
   cloudwatch_logger
-  cloudwatch_metrics_collector
-  health_metric_collector
-  ros_monitoring_msgs
   kinesis_video_streamer
   kinesis_video_msgs
   h264_video_encoder
@@ -58,9 +55,6 @@ catkin_package(
     nav_msgs
     message_runtime
     cloudwatch_logger
-    cloudwatch_metrics_collector
-    health_metric_collector
-    ros_monitoring_msgs
     kinesis_video_streamer
     kinesis_video_msgs
     h264_video_encoder

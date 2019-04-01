@@ -15,9 +15,6 @@
   <depend>geometry_msgs</depend>
   <depend>nav_msgs</depend>
   <depend>cloudwatch_logger</depend>
-  <depend>health_metric_collector</depend>
-  <depend>cloudwatch_metrics_collector</depend>
-  <depend>ros_monitoring_msgs</depend>
   <depend>kinesis_manager</depend>
   <depend>kinesis_video_streamer</depend>
   <depend>kinesis_video_msgs</depend>
