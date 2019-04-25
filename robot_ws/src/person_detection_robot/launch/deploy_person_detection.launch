@@ -4,8 +4,8 @@
 
   <!-- Start getting images from the camera -->
   <node type="raspicam_node" pkg="raspicam_node" name="raspicam_node" output="screen">
-    <param name="width" value="640"/>
-    <param name="height" value="480"/>
+    <param name="width" value="410"/>
+    <param name="height" value="308"/>
  
     <param name="framerate" value="10"/>
     <param name="exposure_mode" value="antishake"/>
@@ -18,4 +18,7 @@
     <arg name="use_polly" value="true" />
     <arg name="image_topic" value="/raspicam_node/image"/>
   </include>
+
+  <rosparam param="/h264_video_encoder/subscription_topic" subst_value="true">/raspicam_node/image</rosparam>
+  <rosparam param="/h264_video_encoder/image_transport" subst_value="true">compressed</rosparam>
 </launch>
