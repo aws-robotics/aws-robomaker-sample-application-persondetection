@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>person_detection_log_based_simulation</name>
+  <version>1.0.0</version>
+  <description>
+    AWS RoboMaker log based simulation package for demonstrating Rekognition by detecting faces.
+  </description>
+  <license>MIT</license>
+  <author email="ros-contributions@amazon.com">AWS RoboMaker</author>
+  <maintainer email="ros-contributions@amazon.com">AWS RoboMaker</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>rosbag</exec_depend>
+</package>

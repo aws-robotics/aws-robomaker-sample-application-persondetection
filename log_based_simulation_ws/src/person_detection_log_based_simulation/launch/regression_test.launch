@@ -1,0 +1,12 @@
+<launch>
+  <!--
+     The clock timeout uses the /clock topic time. If the bag reaches this time, then the job 
+     will be cancelled with a timeout status. For a wallclock timeout, use the Simulation Job duration.
+   --> 
+  <arg name="clock_timeout" default="$(optenv CLOCK_TIMEOUT_SECONDS 300)"/>
+
+  <!-- 
+    We use output="screen" so the logging is available real-time via the AWS RoboMaker Simulation Job logs in CloudWatch. Otherwise the logs are uploaded S3.
+  -->
+  <node name="regression_test" pkg="person_detection_log_based_simulation" type="regression_test.py" args="--clock-timeout $(arg clock_timeout)" required="true" output="screen"/>
+</launch>
