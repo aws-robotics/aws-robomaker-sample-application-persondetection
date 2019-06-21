@@ -16,7 +16,7 @@
        See its .launch file for parameterizing AWS region and resource names
    -->
   <include file="$(find person_detection_robot)/launch/kinesis.launch">
-    <arg name="image_topic" value="$(arg image_topic)"/>
+    <param name="image_topic" value="$(arg image_topic)"/>
   </include>
 
   <!-- Launch node to extract names from Rekognition results. Sends Polly/voice requests. -->
