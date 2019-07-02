@@ -47,7 +47,7 @@
                "sourceBundleFile":"./PersonDetection/robot_ws/bundle/output.tar",
                "architecture":"X86_64",
                "robotSoftwareSuite":{
-                  "version":"Kinetic",
+                  "version":"<capitalised name of ROS distribution, e.g. Kinetic>",
                   "name":"ROS"
                },
                "launchConfig":{
@@ -69,11 +69,11 @@
                },
                "robotSoftwareSuite":{
                  "name":"ROS",
-                 "version":"Kinetic"
+                 "version":"<capitalised name of ROS distribution, e.g. Kinetic>"
                },
                "simulationSoftwareSuite":{
                   "name":"Gazebo",
-                  "version":"7"
+                  "version":"<gazebo version number, e.g. 7>"
                },
                "renderingEngine":{
                   "name":"OGRE",
