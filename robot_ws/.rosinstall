@@ -3,7 +3,7 @@
 - git: {local-name: src/deps/utils-ros1, uri: 'https://github.com/aws-robotics/utils-ros1', version: 2.0.0}
 - git: {local-name: src/deps/cloudwatch-common, uri: 'https://github.com/aws-robotics/cloudwatch-common', version: 1.0.1}
 - git: {local-name: src/deps/cloudwatchlogs-ros1, uri: 'https://github.com/aws-robotics/cloudwatchlogs-ros1', version: 2.0.0}
-- git: {local-name: src/deps/kinesisvideo-common, uri: 'https://github.com/aws-robotics/kinesisvideo-common', version: 2.0.0}
+- git: {local-name: src/deps/kinesisvideo-common, uri: 'https://github.com/aws-robotics/kinesisvideo-common', version: 021b1a3c2d94440055382fdc0bbf0bf32afdfd9e}
 - git: {local-name: src/deps/kinesisvideo-ros1, uri: 'https://github.com/aws-robotics/kinesisvideo-ros1', version: 2.0.1}
 - git: {local-name: src/deps/kinesisvideo-encoder-common, uri: 'https://github.com/aws-robotics/kinesisvideo-encoder-common', version: 2.0.0}
 - git: {local-name: src/deps/kinesisvideo-encoder-ros1, uri: 'https://github.com/aws-robotics/kinesisvideo-encoder-ros1', version: 1.1.1}
