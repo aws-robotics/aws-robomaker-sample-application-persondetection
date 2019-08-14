@@ -47,7 +47,7 @@ def has_recognized_people(recognized_result):
     if not IS_CANCELLED and recognized_result.data.strip()[:5] == 'I see':
         rospy.loginfo(
             "We have recognized faces, test passed and cancelling job")
-        add_tags([Tag(key="status", value="pass")])
+        add_tags([Tag(key="status", value="passed")])
         cancel_job()
 
 

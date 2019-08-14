@@ -3,7 +3,7 @@
         When simulation job is ready, open up rviz and run
         rosservice call /<name-of-rosbag-play-pause-node>/pause_playback "false"
         to start playing bag files. See README.md for details.
-   -->
+  -->
   <include file="$(find person_detection_log_based_simulation)/launch/rosbag_play.launch"> 
     <arg name="ARGS" value="--pause"/>
   </include>

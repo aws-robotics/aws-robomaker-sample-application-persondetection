@@ -5,21 +5,21 @@
   -->
   <arg name="ROSBAGS_PATH" default="$(optenv ROSBAGS_PATH /opt/robomaker/datasources/aws_sample_apps_resources/rosbags)"/>
 
-  <!-- Example bag files-->
+  <!--  Example bag files  -->
   <arg name="BAG1" default="log_based_sim_bag_1.bag"/>
   <arg name="BAG2" default="log_based_sim_bag_2.bag"/>
   <arg name="BAG3" default="log_based_sim_bag_3.bag"/>
 
-  <!-- Arguments for rosbag play. Specify via roslaunch CLI or include. See play_paused.launch -->
+  <!--  Arguments for rosbag play. Specify via roslaunch CLI or include. See play_paused.launch  -->
   <arg name="ARGS" default=""/>
 
-  <!-- Optional additional arguments for rosbag play specified via an environment variable -->
+  <!--  Optional additional arguments for rosbag play specified via an environment variable  -->
   <arg name="ADDITIONAL_ARGS" default="$(optenv ROSBAG_PLAY_ARGS)"/>
 
   <!--
-        We always use "keep-alive" so the node doesn't exit at the end of the bag playback. This avoids ROS failing since the node is required. 
+        We always use "keep-alive" so the node doesn't exit at the end of the bag playback. This avoids ROS failing since the node is required.
         We always use "clock" argument to the /clock topic from the bag is also published
         We use require="true" so if the node exits unexpectedly, the job is failed.
-   -->
+  -->
   <node pkg="rosbag" type="play" name="rosbag_play" required="true" args="--keep-alive --clock $(arg ARGS) $(arg ADDITIONAL_ARGS) $(arg ROSBAGS_PATH)/$(arg BAG1) $(arg ROSBAGS_PATH)/$(arg BAG2) $(arg ROSBAGS_PATH)/$(arg BAG3)"/>
 </launch>

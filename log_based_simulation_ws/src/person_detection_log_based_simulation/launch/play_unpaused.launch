@@ -3,9 +3,9 @@
         Example ROS bags may already be played in simulation before the simulation job is completely ready
         To be able to see the output from rosbag play, please use the play_paused.launch file and pause/unpause
         from the terminal using the ROS CLI. See README.md for details.
-   -->
+  -->
   <include file="$(find person_detection_log_based_simulation)/launch/rosbag_play.launch"/> 
 
-  <!-- Start the regression test. This will tag with pass status and cancel the job. -->
+  <!--  Start the regression test. This will tag with pass status and cancel the job.  -->
   <include file="$(find person_detection_log_based_simulation)/launch/regression_test.launch"/> 
 </launch>
