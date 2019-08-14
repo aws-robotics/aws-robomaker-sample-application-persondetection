@@ -5,7 +5,7 @@ import argparse
 import rospy
 from std_msgs.msg import String
 from robomaker_simulation_msgs.msg import Tag
-from robomaker_simulation_msgs.srv import Cancel, AddTags, ListTags
+from robomaker_simulation_msgs.srv import Cancel, AddTags
 
 
 IS_CANCELLED = False
