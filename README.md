@@ -1,3 +1,5 @@
+## Note: this branch is under active development and might not be functional yet.
+
 # AWS RoboMaker Sample Application - Navigation and Person Detection
 
 This application demonstrates the use of Amazon Rekognition to recognize people's faces
