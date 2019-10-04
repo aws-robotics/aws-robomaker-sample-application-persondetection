@@ -16,34 +16,34 @@
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
+import time
 
-import rospy
+import rclpy
+from rclpy.node import Node
+from rclpy.time import Time
+
 from geometry_msgs.msg import Twist
 
-class Rotator():
+class Rotator(Node):
     def __init__(self):
-        self._cmd_pub = rospy.Publisher('/cmd_vel', Twist, queue_size=1)
+        super().__init__('rotate')
+        self._cmd_pub = self.create_publisher(Twist, '/cmd_vel')
 
     def rotate_forever(self):
-        self.twist = Twist()
-        
+        twist = Twist()
         direction = 1
         angular_speed = 0.2
-        r = rospy.Rate(0.1)
-        while not rospy.is_shutdown():
-            self.twist.angular.z = direction * angular_speed
-            self._cmd_pub.publish(self.twist)
-            rospy.loginfo("Rotating Robot: %s", self.twist)
-            r.sleep()
+        while rclpy.ok():
+            twist.angular.z = direction * angular_speed
+            self._cmd_pub.publish(twist)
+            self.get_logger().info('Rotating robot: {}'.format(twist))
+            time.sleep(0.1)
 
 
-def main():
-    rospy.init_node('rotate')
-    try:
-        rotator = Rotator()
-        rotator.rotate_forever()
-    except rospy.ROSInterruptException:
-        pass
+def main(args=None):
+    rclpy.init(args=args)
+    rotator = Rotator()
+    rotator.rotate_forever()
 
 if __name__ == '__main__':
     main()

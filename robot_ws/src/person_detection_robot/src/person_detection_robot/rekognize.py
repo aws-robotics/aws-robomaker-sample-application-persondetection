@@ -16,58 +16,56 @@
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-
+import time
 import json
 
-import rospy
-import actionlib
+import rclpy
+from rclpy.node import Node
+from rclpy.time import Time
+
 from std_msgs.msg import String
 
-class Rekognizer:
+class Rekognizer(Node):
 
     def __init__(self, rekognition_topic="/rekognition/results"):
-
+        super().__init__('rekognize')
         #Listen for rekognition results
-        self.rekognition_subscriber = rospy.Subscriber(rekognition_topic, String, self.rekognize_callback)
-
+        self.rekognition_subscriber = self.create_subscription(String, rekognition_topic, self.rekognize_callback, 10)
         #Publish names extraced from rekognition results
-        self.output_publisher = rospy.Publisher("/rekognized_people", String)
+        self.output_publisher = self.create_publisher(String, "/rekognized_people")
 
     def rekognize_callback(self, msg):
         image_ids = []
         try:
             msg = json.loads(msg.data)
             if msg["FaceSearchResponse"]:
-                rospy.logdebug("Rekognition result has FaceSeachResponse, looking for matched faces")
+                self.get_logger().debug("Rekognition result has FaceSeachResponse, looking for matched faces")
                 for face in msg['FaceSearchResponse'][0]['MatchedFaces']:
-                    rospy.logdebug("Matched face: %s", face)
+                    self.get_logger().debug(f"Matched face: {face}")
                     # Default 'unnamed' is required for indexed images without ExternalImageId
                     name = face['Face'].get('ExternalImageId', 'unknown')
-                    rospy.logdebug("Matched face has name: %s", name)
+                    self.get_logger().debug(f"Matched face has name: {name}")
                     image_ids.append(name)
             else:
                 return
         except ValueError as e:
-            rospy.logerr("Error loading json message from rekognition:\n%s", e)
+            self.get_logger().error(f"Error loading json message from rekognition:\n{e}")
             return
 
         if not image_ids:
-            rospy.loginfo("Rekognition result has no faces")
+            self.get_logger().info('Rekognition result has no faces')
             return 
 
         names =" and ".join([image_id.replace("_"," ") for image_id in image_ids])
-        text = "I see {}".format(names)
+        text = String()
+        text.data = "I see {}".format(names)
         self.output_publisher.publish(text)
-        rospy.loginfo(text)
+        self.get_logger().info(text.data)
 
-
-def main():
-    rospy.init_node("rekognize", log_level=rospy.INFO)
-    
-    rekognizer = Rekognizer()
-    
-    rospy.spin()
-
+def main(args=None):
+    rclpy.init(args=args)
+    rotator = Rekognizer()
+    rclpy.spin(rotator)
 
 if __name__ == '__main__':
     main()
