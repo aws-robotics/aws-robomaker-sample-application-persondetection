@@ -20,7 +20,7 @@
   <depend>h264_encoder_core</depend>
   <depend>h264_video_encoder</depend>
   <depend>tts</depend>
-  <depend>tts_interface</depend>
+  <depend>tts_interfaces</depend>
 
   <depend>turtlebot3</depend>
   <depend>turtlebot3_msgs</depend>
