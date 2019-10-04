@@ -1,66 +1,68 @@
-# An optional metric namespace parameter. If provided it will set the namespace for all metrics provided by this node to
-# the provided value. If the node is running on a AWS RoboMaker system then the provided launch file will ignore this parameter in
-# favor of the namespace specified by the AWS RoboMaker ecosystem
-aws_metrics_namespace: "roboMakerSampleAppCloudWatchRobotMetrics"
+cloudwatch_metrics_collector:
+  ros__parameters:
+    # An optional metric namespace parameter. If provided it will set the namespace for all metrics provided by this node to
+    # the provided value. If the node is running on a AWS RoboMaker system then the provided launch file will ignore this parameter in
+    # favor of the namespace specified by the RoboMaker ecosystem
+    aws_metrics_namespace: "roboMakerSampleAppCloudWatchRobotMetrics"
 
-# An optional list of topics to listen to. If not provided or is empty the node will just listen on the global "metrics"
-# topic. If this list is not empty then the node will not subscribe to the "metrics" topic and will only subscribe to the
-# topics in the list.
-#aws_monitored_metric_topics: ["metrics"]
+    # An optional list of topics to listen to. If not provided or is empty the node will just listen on the global "metrics"
+    # topic. If this list is not empty then the node will not subscribe to the "metrics" topic and will only subscribe to the
+    # topics in the list.
+    #aws_monitored_metric_topics: ["metrics"]
 
-# This is the AWS Client Configuration used by the AWS service client in the Node. If given the node will load the
-# provided configuration when initializing the client.
-aws_client_configuration:
-    # Specifies where you want the client to communicate. Examples include us-east-1 or us-west-1. You must ensure that
-    # the service you want to use has an endpoint in the region you configure.
-    region: "us-west-2"
+    # This is the AWS Client Configuration used by the AWS service client in the Node. If given the node will load the
+    # provided configuration when initializing the client.
+    aws_client_configuration:
+        # Specifies where you want the client to communicate. Examples include us-east-1 or us-west-1. You must ensure that
+        # the service you want to use has an endpoint in the region you configure.
+        region: "us-west-2"
 
-    # Built in the constructor and pulls information from your operating system. Do not alter the user agent.
-    #userAgent: ""
+        # Built in the constructor and pulls information from your operating system. Do not alter the user agent.
+        #userAgent: ""
 
-    # Use this to override the http endpoint used to talk to a service. If you set this, you must also set authenticationRegion.
-    #endpointOverride: ""
+        # Use this to override the http endpoint used to talk to a service. If you set this, you must also set authenticationRegion.
+        #endpointOverride: ""
 
-    # These settings allow you to configure a proxy for all communication with AWS. Examples of when this functionality
-    # might be useful include debugging in conjunction with the Burp suite, or using a proxy to connect to the Internet.
-    #proxyHost: ""
-    #proxyPort: 0
-    #proxyUserName: ""
-    #proxyPassword: ""
+        # These settings allow you to configure a proxy for all communication with AWS. Examples of when this functionality
+        # might be useful include debugging in conjunction with the Burp suite, or using a proxy to connect to the Internet.
+        #proxyHost: ""
+        #proxyPort: 0
+        #proxyUserName: ""
+        #proxyPassword: ""
 
-    # Enables you to tell the HTTP client where to find your SSL certificate trust store (for example, a directory
-    # prepared with OpenSSL's c_rehash utility). You shouldn't need to do this unless you are using symlinks in your
-    # environment. This has no effect on Windows or OS X.
-    #caPath: ""
-    #caFile: ""
+        # Enables you to tell the HTTP client where to find your SSL certificate trust store (for example, a directory
+        # prepared with OpenSSL's c_rehash utility). You shouldn't need to do this unless you are using symlinks in your
+        # environment. This has no effect on Windows or OS X.
+        #caPath: ""
+        #caFile: ""
 
-    # Values that determine the length of time, in milliseconds, to wait before timing out a request. You can increase
-    # this value if you need to transfer large files, such as in Amazon S3 or Amazon CloudFront.
-    requestTimeoutMs: 2000
-    connectTimeoutMs: 2000
+        # Values that determine the length of time, in milliseconds, to wait before timing out a request. You can increase
+        # this value if you need to transfer large files, such as in Amazon S3 or Amazon CloudFront.
+        requestTimeoutMs: 2000
+        connectTimeoutMs: 2000
 
-    # The maximum number of allowed connections to a single server for your HTTP communications. The default value is 25.
-    # You can set this value as high as you can support the bandwidth. We recommend a value around 25.
-    #maxConnections: 25
+        # The maximum number of allowed connections to a single server for your HTTP communications. The default value is 25.
+        # You can set this value as high as you can support the bandwidth. We recommend a value around 25.
+        #maxConnections: 25
 
 
-    # Use dual stack endpoint in the endpoint calculation. You must ensure that the service you want to use supports ipv6 in the region you select.
-    #useDualStack: false
+        # Use dual stack endpoint in the endpoint calculation. You must ensure that the service you want to use supports ipv6 in the region you select.
+        #useDualStack: false
 
-    # Enable adjustment for clock skew
-    #enableClockSkewAdjustment: true
+        # Enable adjustment for clock skew
+        #enableClockSkewAdjustment: true
 
-    # If set to true the http stack will follow redirect codes
-    #followRedirects: false
+        # If set to true the http stack will follow redirect codes
+        #followRedirects: false
 
-    # Specifies whether to enable SSL certificate verification. If necessary, you can disable SSL certificate verification by setting verifySSL to false.
-    #verifySSL: true
+        # Specifies whether to enable SSL certificate verification. If necessary, you can disable SSL certificate verification by setting verifySSL to false.
+        #verifySSL: true
 
-# This is the storage resolution level for presenting metrics in CloudWatch.
-# Valid values are 1 and 60. Setting this to 1 specifies this metric as a
-# high-resolution metric, so that CloudWatch stores the metric with sub-minute
-# resolution down to one second. Setting this to 60 specifies this metric as a
-# regular-resolution metric, which CloudWatch stores at 1-minute resolution.
-# Currently, high resolution is available only for custom metrics. For more
-# information about high-resolution metrics, see http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html
-storage_resolution: 1
+    # This is the storage resolution level for presenting metrics in CloudWatch.
+    # Valid values are 1 and 60. Setting this to 1 specifies this metric as a
+    # high-resolution metric, so that CloudWatch stores the metric with sub-minute
+    # resolution down to one second. Setting this to 60 specifies this metric as a
+    # regular-resolution metric, which CloudWatch stores at 1-minute resolution.
+    # Currently, high resolution is available only for custom metrics. For more
+    # information about high-resolution metrics, see http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html
+    storage_resolution: 1
