@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>person_detection_robot</name>
   <version>1.1.0</version>
   <description>
@@ -8,8 +8,7 @@
   <license>MIT</license>
   <author email="ros-contributions@amazon.com">AWS RoboMaker</author>
   <maintainer email="ros-contributions@amazon.com">AWS RoboMaker</maintainer>
-  <buildtool_depend>catkin</buildtool_depend>
-  <depend>rospy</depend>
+  <depend>rclpy</depend>
   <depend>std_msgs</depend>
   <depend>sensor_msgs</depend>
   <depend>geometry_msgs</depend>
@@ -21,12 +20,14 @@
   <depend>h264_encoder_core</depend>
   <depend>h264_video_encoder</depend>
   <depend>tts</depend>
+  <depend>tts_interface</depend>
 
   <depend>turtlebot3</depend>
   <depend>turtlebot3_msgs</depend>
   
-  <build_depend>message_generation</build_depend>
-  <build_export_depend>message_runtime</build_export_depend>
-  <exec_depend>message_runtime</exec_depend>
   <exec_depend>turtlebot3_bringup</exec_depend>
+
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
 </package>
