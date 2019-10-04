@@ -1,18 +1,17 @@
 sudo: required
 language: generic
-compiler:
-- gcc
+dist: bionic
 notifications:
   email:
     on_success: change
     on_failure: always
     recipients:
-    - ros-contributions@amazon.com
+#    - ros-contributions@amazon.com
+#    - travis-build@platform-notifications.robomaker.aws.a2z.com  #Uncomment once the build passes
 env:
   matrix:
-  - ROS_DISTRO=kinetic ROS_VERSION=1 GAZEBO_VERSION=7
-  - ROS_DISTRO=kinetic ROS_VERSION=1 GAZEBO_VERSION=9
-  - ROS_DISTRO=melodic ROS_VERSION=1 GAZEBO_VERSION=9
+  - ROS_DISTRO=dashing ROS_VERSION=2 GAZEBO_VERSION=9 WORKSPACES="robot_ws"
+#  - ROS_DISTRO=dashing ROS_VERSION=2 GAZEBO_VERSION=9 WORKSPACES="simulation_ws"    # TODO
   global:
   - secure: LLgChre6NXu2cUefhXJ/LLbW7MUrZ5d/fS9M1fjWIAc4kqGyJczihs9W6wSXZF4qYI1Yo4I8PmQPTNnswKFAbsSusPd5v3nqqI/LSGfvPCGs8Z9A3CGtM4WJ/eNngx9HpPfU1vMODLuHM4Y2dYbWfHmottW/JUUX02JmQ/nSSNG5l/8wCptGVA6bRBZQGsxOPC22Yn9I5hvX3Pxs75vs1ej1kexk1x4txAlbGL0+NfjBDw+92+h0qS0ELLZJALnVNefRzvYn6Jb53ehbqhldCJWPX48WToYhb4HEIVwx1GC5WF0K227kFLKRTxycL+ZgOQc6uvRAx8aghHS8ODuRdCzrhuEnFxO24szSfxguZCAoxqNeHos7lh6Glqk2uzgUNG/A1q1pa4cvYSQIyzde3q8j+6daFXQd9EFAzjBsiHDBS8OchnZKBVe1SPbRshrVFXwzIWCiFZP1pm2zmr6cWdFi26DEwZJ3k0Q2a6EPBIgoG9U+SEgzMwzIpj58WBl8dasvR7+GtRZ56C+TSKc6PQd2w8CFXDu9yos/5m14N2avBqHKnsxxfAoCpUhjVZ2nxShRRMkVDosPqL0bTtbb/Y5xs5mQMzB3GOpvsQ5CTzLsPwLo/r+IpfGMvfy3Bwl7mR5f/k5BfsIicT5mjsFYgmctfsMwWvsnv8HX8XoS4bo=
   - secure: UlU+m/MQ+39MO5XRkd7bPcVkv3txF1ny5MxfETErmGOazJLssz6aJMX5qg4sB2K42lrJyMnAHADLMF8ZwavXNm5LzvVjeQUiWl+scvh6CvSWwQKq5sVKVhtYQsfJr5HV1oDYOcSsuKI3WYIpRJ8bqjBVIBo5JWdpJFjoV/ts2hPPFiQen+G+u4o6kF0lCaK7JKKfhfANI36lrpzHVWQRnbK9QoFGkVUUN6exlSdhXrgPfDOPAKr6N7YyHsKcq+vIzvAvwIRty7tzu4IrpdDg9VADWRSxflr1axLhunuoLU5HNuaAr8+pnA64dLGnQl/ZOjOzfIkrWMoXLX0NFU7gxbXu31Jxs4LPaovdQZA7wATOXrgBvG7w7AXDDPBW2cuW6bcknYioi1FIFRau/HqRtdx9jyYUuF0uCIdL2kgkJlMbt/2alhGJCMuJipjQSrYA5IjHg6uJtgOsouk32vF6+Kti+wQis/YIb5kRikr8TrOiIZQenaJVw+cnYMtR86Y4btFFWXq+AL9e4xJJFzazerLMtt8uN8bx0SQ9Qp4GQMiWir+UHtX9Cflxb8Bg9+hlV8NF77AkJL4q8nzGrY4lqX9/gFVk8r1drPir8cyuxHEcDWW1wiQqBgdilGP68JJOtK4MTyc8bHrDtuentolxdF+q4P0OYaQvumzgtJ42Cx8=
@@ -24,17 +23,15 @@ env:
   - AWS_DEFAULT_REGION=us-west-2
 before_install:
 - pip install --user awscli
-- openssl aes-256-cbc -K $encrypted_13642953d095_key -iv $encrypted_13642953d095_iv
-  -in github_deploy.pem.enc -out github_deploy.pem -d
 install:
 - git clone https://github.com/aws-robotics/travis-scripts.git .ros_ci
 script:
-- . .ros_ci/add_tag.sh
+- . .ros_ci/add_tag.sh && set +e
 - while sleep 9m; do echo "=====[ $SECONDS seconds still running ]====="; done &
-- .ros_ci/ce_build.sh
+- ".ros_ci/ce_build.sh"
 - kill %1
 before_deploy:
-- . .ros_ci/before_deploy.sh
+- . .ros_ci/before_deploy.sh && set +e
 deploy:
   - provider: s3
     access_key_id: "$AWS_ACCESS_KEY_ID"
@@ -45,11 +42,11 @@ deploy:
     skip_cleanup: true
     wait-until-deployed: true
     on:
-      branch: master
+      branch: ros2
     upload-dir: travis/${SA_NAME}/${ROS_DISTRO}/gazebo${GAZEBO_VERSION}
   - provider: script
     script: bash .ros_ci/codepipeline_deploy.sh
     on:
-      branch: master
+      branch: ros2
 after_deploy:
 - .ros_ci/post_deploy.sh
