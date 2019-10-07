@@ -85,7 +85,7 @@ def generate_launch_description():
             os.path.join(person_detection_robot_dir, 'launch', 'person_detection.launch.py')),
         launch_arguments={
             'use_sim_time': 'false',
-            'use_polly': 'false'
+            'use_polly': 'true'
         }.items())
 
     ld = LaunchDescription([turtlebot3_bringup_launch,
