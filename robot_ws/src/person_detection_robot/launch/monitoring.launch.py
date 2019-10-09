@@ -14,29 +14,30 @@
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 import os
-import sys
 import yaml
 
+from ament_index_python.packages import get_package_share_directory
+
 import launch
-import launch_ros.actions
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch.substitutions import PythonExpression
-from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
-    default_metrics_config = os.path.join(get_package_share_directory('person_detection_robot'), 'config', 'cloudwatch_metrics_config.yaml')
-    default_logs_config = os.path.join(get_package_share_directory('person_detection_robot'), 'config', 'cloudwatch_logs_config.yaml')
+    default_metrics_config = os.path.join(get_package_share_directory('person_detection_robot'),
+                                          'config', 'cloudwatch_metrics_config.yaml')
+    default_logs_config = os.path.join(get_package_share_directory('person_detection_robot'),
+                                       'config', 'cloudwatch_logs_config.yaml')
 
     with open(default_metrics_config, 'r') as f:
-      config_text = f.read()
+        config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
     default_aws_metrics_namespace = config_yaml['cloudwatch_metrics_collector']['ros__parameters']['aws_metrics_namespace']
     default_aws_region = config_yaml['cloudwatch_metrics_collector']['ros__parameters']['aws_client_configuration']['region']
 
     with open(default_logs_config, 'r') as f:
-      config_text = f.read()
+        config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
     default_log_group_name = config_yaml['cloudwatch_logger']['ros__parameters']['log_group_name']
 

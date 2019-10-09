@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
@@ -20,7 +20,6 @@ import time
 
 import rclpy
 from rclpy.node import Node
-from rclpy.time import Time
 
 from geometry_msgs.msg import Twist
 

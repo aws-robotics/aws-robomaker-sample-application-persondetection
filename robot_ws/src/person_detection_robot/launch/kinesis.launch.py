@@ -13,27 +13,29 @@
 
 import os
 import yaml
-import launch
 
-import launch_ros.actions
+from ament_index_python.packages import get_package_share_directory
+
+import launch
 from launch.substitutions import PythonExpression
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 
-from ament_index_python.packages import get_package_share_directory
-
 def generate_launch_description():
-    kvs_config_file_path = os.path.join(get_package_share_directory('person_detection_robot'),
+    kvs_config_file_path = os.path.join(
+        get_package_share_directory('person_detection_robot'),
         'config', 'kvs_config.yaml')
-    h264_encoder_config_file_path = os.path.join(get_package_share_directory('person_detection_robot'),
+    h264_encoder_config_file_path = os.path.join(
+        get_package_share_directory('person_detection_robot'),
         'config', 'h264_encoder_config.yaml')
-    kvs_logger_config_file_path = os.path.join(get_package_share_directory('kinesis_video_streamer'),
+    kvs_logger_config_file_path = os.path.join(
+        get_package_share_directory('kinesis_video_streamer'),
         'config', 'kvs_log_configuration')
 
     with open(kvs_config_file_path, 'r') as f:
         config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
-    
+
     default_stream_name = config_yaml['kinesis_video_streamer']['ros__parameters']['kinesis_video']['stream0']['stream_name']
 
     launch_actions = [
@@ -69,7 +71,7 @@ def generate_launch_description():
             ),
             launch_arguments={
                 'node_name': launch.substitutions.LaunchConfiguration('h264_node_name'),
-                'config': h264_encoder_config_file_path, 
+                'config': h264_encoder_config_file_path,
                 'image_transport': launch.substitutions.LaunchConfiguration('image_transport'),
             }.items()
         ),

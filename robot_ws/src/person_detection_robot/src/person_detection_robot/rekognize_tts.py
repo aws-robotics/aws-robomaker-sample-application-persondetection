@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
@@ -16,79 +16,37 @@
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-import os
-import time
 import json
-
-import gi
-gi.require_version('Gst', '1.0')
-from gi.repository import Gst
 
 import rclpy
 from rclpy.node import Node
-from rclpy.time import Time
-from rclpy.action import ActionClient
 
 from tts_interfaces.srv import Synthesizer
 from std_msgs.msg import String
+from tts.voicer import Voicer
 
 class Rekognizer(Node):
 
     def __init__(self, rekognition_topic="/rekognition/results"):
         super().__init__('rekognize_tts')
-        Gst.init(None)
         #Listen for rekognition results
-        self.rekognition_subscriber = self.create_subscription(String, rekognition_topic, self.rekognize_callback, 10)
+        self.rekognition_subscriber = self.create_subscription(String,
+                                                               rekognition_topic,
+                                                               self.rekognize_callback,
+                                                               10)
         #Action client for Polly
         self.synthesizer = self.create_client(Synthesizer, 'synthesizer')
+        self.voicer = Voicer()
 
-    def handle_result(self, synthesizer_response):
-        result = synthesizer_response.result
-        try:
-            r = json.loads(result)
-        except Exception as e:
-            s = 'Expecting JSON from synthesizer but got {}'.format(result)
-            self.get_logger().error('{}. Exception: {}'.format(s, e))
-            return
+    def speak(self):
+        self.voicer.req = Synthesizer.Request()
+        self.voicer.req.text = "I see {}".format(self.names)
 
-        result = ''
+        while not self.synthesizer.wait_for_service(timeout_sec=1.0):
+            self.get_logger().warn('service not available, waiting again...')
 
-        if 'Audio File' in r:
-            audio_file = r['Audio File']
-            print(audio_file)
-            self.get_logger().info('Will play {}'.format(audio_file))
-            self.play(audio_file)
-            result = audio_file
-
-        if 'Exception' in r:
-            result = '[ERROR] {}'.format(r)
-            self.get_logger().error(result)
-
-        return result
-
-    def play(self, filename):
-        self.get_logger().info('using gstreamer to play the audio')
-
-        playbin = Gst.ElementFactory.make('playbin', 'player')
-
-        bus = playbin.get_bus()
-
-        playbin.props.uri = 'file://' + os.path.abspath(filename)
-        time.sleep(0.5)  # sometimes gst needs time to get ready for unknown reasons
-        set_result = playbin.set_state(Gst.State.PLAYING)
-        if set_result != Gst.StateChangeReturn.ASYNC:
-            raise RuntimeError("gstreamer error: playbin.set_state returned " + repr(set_result))
-
-        bus.poll(Gst.MessageType.EOS, Gst.CLOCK_TIME_NONE)
-        playbin.set_state(Gst.State.NULL)
-
-    def on_synthesize_done(self, future):
-        if future.result():
-            self.get_logger().info(f'Result: {str(future.result())}')
-            self.handle_result(future.result())
-            self.get_logger().info(f'Done speaking {self.req.text}')
-        else:
-            self.get_logger().error(f'Exception while calling service: {future.exception()}')
+        future = self.synthesizer.call_async(self.voicer.req)
+        future.add_done_callback(self.voicer.on_synthesize_done)
 
     def rekognize_callback(self, msg):
         image_ids = []
@@ -110,24 +68,17 @@ class Rekognizer(Node):
 
         if not image_ids:
             self.get_logger().info('Rekognition result has no faces')
-            return 
+            return
 
-        names =" and ".join([image_id.replace("_"," ") for image_id in image_ids])
-
-        #Create Polly Request
-        self.req = Synthesizer.Request()
-        self.req.text = "I see {}".format(names)
-
-        while not self.synthesizer.wait_for_service(timeout_sec=1.0):
-            self.get_logger().warn('service not available, waiting again...')
-
-        future = self.synthesizer.call_async(self.req)
-        future.add_done_callback(self.on_synthesize_done)
+        self.names = " and ".join([image_id.replace("_", " ") for image_id in image_ids])
+        self.speak()
 
 def main(args=None):
     rclpy.init(args=args)
-    rotator = Rekognizer()
-    rclpy.spin(rotator)
+    rekognizer = Rekognizer()
+    rclpy.spin(rekognizer)
+    rekognizer.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

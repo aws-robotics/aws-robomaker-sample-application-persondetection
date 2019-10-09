@@ -15,13 +15,12 @@
 
 import os
 import sys
-import launch
-import launch_ros.actions
 
-from launch import LaunchDescription
-from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
+import launch_ros.actions
 from ament_index_python.packages import get_package_share_directory
+
+import launch
+from launch import LaunchDescription
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))  # noqa
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'launch'))  # noqa
@@ -29,9 +28,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'launch')
 
 def generate_launch_description():
 
-    ##########################################
-    ##  Turtlebot3 Person Detection Launch  ##
-    ##########################################
+    ######################################
+    # Turtlebot3 Person Detection Launch #
+    ######################################
 
     use_sim_time_false = launch.actions.DeclareLaunchArgument(
         'use_sim_time',
@@ -43,9 +42,9 @@ def generate_launch_description():
         default_value='true',
         description='Use AWS Polly Service')
 
-    ###################################################
-    ##  TTS Polly Server and rekognition Node Launch ##
-    ###################################################
+    ################################################
+    # TTS Polly Server and rekognition Node Launch #
+    ################################################
     rekognize_node = launch_ros.actions.Node(
         package='person_detection_robot', node_executable='rekognize', output='screen',
         node_name='rekognize',
@@ -58,7 +57,7 @@ def generate_launch_description():
         launch.launch_description_sources.PythonLaunchDescriptionSource(
             os.path.join(tts_dir, 'tts.launch.py')),
         condition=launch.conditions.IfCondition(
-                launch.substitutions.LaunchConfiguration('use_polly'))
+            launch.substitutions.LaunchConfiguration('use_polly'))
     )
 
     rekognize_tts_node = launch_ros.actions.Node(
@@ -67,20 +66,20 @@ def generate_launch_description():
         name='rekognize_tts',
         parameters=[{'use_sim_time': launch.substitutions.LaunchConfiguration('use_sim_time')}],
         condition=launch.conditions.IfCondition(
-                launch.substitutions.LaunchConfiguration('use_polly'))
+            launch.substitutions.LaunchConfiguration('use_polly'))
     )
 
-    #############################
-    ##  AWS Monitoring Launch  ##
-    #############################
+    #########################
+    # AWS Monitoring Launch #
+    #########################
     person_detection_robot_dir = get_package_share_directory('person_detection_robot')
     monitoring_launch = launch.actions.IncludeLaunchDescription(
         launch.launch_description_sources.PythonLaunchDescriptionSource(
             os.path.join(person_detection_robot_dir, 'launch', 'monitoring.launch.py')))
 
-    #################################
-    ##  AWS Kinesis Stream Launch  ##
-    #################################
+    #############################
+    # AWS Kinesis Stream Launch #
+    #############################
     kinesis_launch = launch.actions.IncludeLaunchDescription(
         launch.launch_description_sources.PythonLaunchDescriptionSource(
             os.path.join(person_detection_robot_dir, 'launch', 'kinesis.launch.py')))

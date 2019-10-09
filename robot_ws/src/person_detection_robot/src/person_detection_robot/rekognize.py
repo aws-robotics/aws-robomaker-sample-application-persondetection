@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """
  Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
@@ -16,12 +16,10 @@
  SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 """
 
-import time
 import json
 
 import rclpy
 from rclpy.node import Node
-from rclpy.time import Time
 
 from std_msgs.msg import String
 
@@ -30,9 +28,13 @@ class Rekognizer(Node):
     def __init__(self, rekognition_topic="/rekognition/results"):
         super().__init__('rekognize')
         #Listen for rekognition results
-        self.rekognition_subscriber = self.create_subscription(String, rekognition_topic, self.rekognize_callback, 10)
+        self.rekognition_subscriber = self.create_subscription(String,
+                                                               rekognition_topic,
+                                                               self.rekognize_callback,
+                                                               10)
         #Publish names extraced from rekognition results
-        self.output_publisher = self.create_publisher(String, "/rekognized_people")
+        self.output_publisher = self.create_publisher(String,
+                                                      "/rekognized_people")
 
     def rekognize_callback(self, msg):
         image_ids = []
@@ -54,9 +56,9 @@ class Rekognizer(Node):
 
         if not image_ids:
             self.get_logger().info('Rekognition result has no faces')
-            return 
+            return
 
-        names =" and ".join([image_id.replace("_"," ") for image_id in image_ids])
+        names = " and ".join([image_id.replace("_", " ") for image_id in image_ids])
         text = String()
         text.data = "I see {}".format(names)
         self.output_publisher.publish(text)
@@ -64,8 +66,10 @@ class Rekognizer(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    rotator = Rekognizer()
-    rclpy.spin(rotator)
+    rekognizer = Rekognizer()
+    rclpy.spin(rekognizer)
+    rekognizer.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
