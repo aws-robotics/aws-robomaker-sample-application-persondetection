@@ -28,9 +28,6 @@ def generate_launch_description():
     h264_encoder_config_file_path = os.path.join(
         get_package_share_directory('person_detection_robot'),
         'config', 'h264_encoder_config.yaml')
-    kvs_logger_config_file_path = os.path.join(
-        get_package_share_directory('kinesis_video_streamer'),
-        'config', 'kvs_log_configuration')
 
     with open(kvs_config_file_path, 'r') as f:
         config_text = f.read()
@@ -81,10 +78,9 @@ def generate_launch_description():
             ),
             launch_arguments={
                 'node_name': launch.substitutions.LaunchConfiguration('kinesis_node_name'),
-                'config': kvs_config_file_path, 
-                'log4cplus_config': kvs_logger_config_file_path,
+                'config': kvs_config_file_path,
                 'stream_name': launch.substitutions.LaunchConfiguration('stream_name'),
-            }.items()
+            }.items(),
         )
     ]
 

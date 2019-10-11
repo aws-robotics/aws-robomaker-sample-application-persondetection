@@ -16,7 +16,7 @@ kinesis_video_streamer:
 
     kinesis_video:
       # This will be replaced upon the first launch with the actual path. If the path is too long, the file will be copied into /tmp/ instead.
-      log4cplus_config: "/tmp/kvs_log_configuration"
+      #log4cplus_config: "/tmp/kvs_log_configuration" 
       stream_count: 1
       stream0:
         # Kinesis Video Stream name. If a stream by the given name doesn't exist, it will be created.
