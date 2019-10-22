@@ -48,11 +48,11 @@
                "architecture":"X86_64",
                "robotSoftwareSuite":{
                   "version":"<capitalised name of ROS distribution, e.g. Kinetic>",
-                  "name":"ROS"
+                  "name":"ROS2"
                },
                "launchConfig":{
                   "packageName":"person_detection_robot",
-                  "launchFile":"person_detection.launch"
+                  "launchFile":"person_detection.launch.py"
                }
             },
             "simulationApp":{
@@ -68,7 +68,7 @@
                   }
                },
                "robotSoftwareSuite":{
-                 "name":"ROS",
+                 "name":"ROS2",
                  "version":"<capitalised name of ROS distribution, e.g. Kinetic>"
                },
                "simulationSoftwareSuite":{

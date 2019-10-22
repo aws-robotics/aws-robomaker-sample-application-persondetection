@@ -111,25 +111,7 @@ def generate_launch_description():
             }],
             condition=launch.conditions.IfCondition(
                 launch.substitutions.LaunchConfiguration('follow_route'))
-        ),
-        launch.actions.IncludeLaunchDescription(
-            launch.launch_description_sources.PythonLaunchDescriptionSource(
-                os.path.join(
-                    get_package_share_directory('person_detection_simulation'),
-                    'launch',
-                    'kinesis.launch.py'
-                )
-            )
-        ),
-        launch.actions.IncludeLaunchDescription(
-            launch.launch_description_sources.PythonLaunchDescriptionSource(
-                os.path.join(
-                    get_package_share_directory('person_detection_simulation'),
-                    'launch',
-                    'monitoring.launch.py'
-                )
-            )
-        )    
+        )
     ])
     return ld
 

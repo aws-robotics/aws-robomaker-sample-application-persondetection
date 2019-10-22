@@ -67,14 +67,15 @@ def generate_launch_description():
         package='ros2_raspicam_node', node_executable='service', output='screen',
         node_name='ros2_raspicam_node',
         condition=launch.conditions.IfCondition(LaunchConfiguration("run_pi_cam")),
-        name='ros2_raspicam_node')
+        name='ros2_raspicam_node',
+        remappings=[('/raspicam_node/image', '/camera/image_raw')])
 
     usbcam_node = launch_ros.actions.Node(
         package='image_tools', node_executable='cam2image', output='screen',
         node_name='cam2image',
         condition=launch.conditions.IfCondition(LaunchConfiguration("run_usb_cam")),
         name='cam2image',
-        remappings=[('/image', '/raspicam_node/image')])
+        remappings=[('/image', '/camera/image_raw')])
 
     ##############################
     # Start the Person Detection #
