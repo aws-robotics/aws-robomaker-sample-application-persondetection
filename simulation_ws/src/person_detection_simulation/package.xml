@@ -10,17 +10,10 @@
   <maintainer email="ros-contributions@amazon.com">AWS RoboMaker</maintainer>
 
   <!-- <depend>launch</depend> -->
-  <depend>cloudwatch_logger</depend>
-  <depend>cloudwatch_metrics_collector</depend>
-  <depend>kinesis_manager</depend>
-  <depend>kinesis_video_streamer</depend>
-  <depend>kinesis_video_msgs</depend>
-  <depend>h264_video_encoder</depend>
-  <depend>h264_encoder_core</depend>
-  <depend>health_metric_collector</depend>  
   <exec_depend>turtlebot3_description_reduced_mesh</exec_depend>
   <exec_depend>turtlebot3_navigation2</exec_depend>
   <exec_depend>turtlebot3_bringup</exec_depend>
+
   <export>
     <build_type>ament_cmake</build_type>
   </export>

@@ -31,15 +31,14 @@ def generate_launch_description():
     ######################################
     # Turtlebot3 Person Detection Launch #
     ######################################
-
     use_sim_time_false = launch.actions.DeclareLaunchArgument(
         'use_sim_time',
-        default_value='false',
+        default_value='true',
         description='Use sim time')
 
     use_polly = launch.actions.DeclareLaunchArgument(
         'use_polly',
-        default_value='true',
+        default_value='false',
         description='Use AWS Polly Service')
 
     ################################################

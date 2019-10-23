@@ -15,12 +15,10 @@ kinesis_video_streamer:
       max_retries: 10
 
     kinesis_video:
-      # This will be replaced upon the first launch with the actual path. If the path is too long, the file will be copied into /tmp/ instead.
-      #log4cplus_config: "/tmp/kvs_log_configuration" 
       stream_count: 1
       stream0:
         # Kinesis Video Stream name. If a stream by the given name doesn't exist, it will be created.
-        stream_name: "AmazonRekognitionRobomakerPersonDetection"
+        stream_name: "RoboMakerPersonDetectionVideoStream"
 
         # Topic name to subscribe and receive the image/video data from.
         subscription_topic: /video/encoded
@@ -33,7 +31,7 @@ kinesis_video_streamer:
 
         #### If topic_type is 3, we expect the following parameters.
         ### The Kinesis Data Stream from which to read Rekognition's analysis results.
-        rekognition_data_stream: "AmazonRekognitionRobomakerPersonDetection"
+        rekognition_data_stream: "AmazonRekognitionPersonDetectionStream"
         ### The ROS topic on which to publish the results.
         rekognition_topic_name: "/rekognition/results"
 

@@ -13,29 +13,37 @@
 
 import os
 import yaml
-
-from ament_index_python.packages import get_package_share_directory
-
 import launch
+
+import launch_ros.actions
 from launch.substitutions import PythonExpression
 from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 
+from ament_index_python.packages import get_package_share_directory
+
 def generate_launch_description():
-    kvs_config_file_path = os.path.join(
-        get_package_share_directory('person_detection_robot'),
+    kvs_config_file_path = os.path.join(get_package_share_directory('person_detection_robot'),
         'config', 'kvs_config.yaml')
-    h264_encoder_config_file_path = os.path.join(
-        get_package_share_directory('person_detection_robot'),
+    h264_encoder_config_file_path = os.path.join(get_package_share_directory('person_detection_robot'),
         'config', 'h264_encoder_config.yaml')
 
     with open(kvs_config_file_path, 'r') as f:
         config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
 
+    default_aws_region = config_yaml['kinesis_video_streamer']['ros__parameters']['aws_client_configuration']['region']
     default_stream_name = config_yaml['kinesis_video_streamer']['ros__parameters']['kinesis_video']['stream0']['stream_name']
+    default_rekognition_data_stream = config_yaml['kinesis_video_streamer']['ros__parameters']['kinesis_video']['stream0']['rekognition_data_stream']
+
+    default_aws_region = os.environ.get('ROS_AWS_REGION', default_aws_region)
 
     launch_actions = [
+        launch.actions.DeclareLaunchArgument(
+            name='aws_region',
+            description='AWS region override, defaults to config .yaml if not set',
+            default_value=default_aws_region
+        ),
         launch.actions.DeclareLaunchArgument(
             name='launch_id',
             description='Used for resource name suffix if specified',
@@ -44,6 +52,10 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument(
             name='stream_name',
             default_value=default_stream_name
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='rekognition_data_stream',
+            default_value=default_rekognition_data_stream
         ),
         launch.actions.DeclareLaunchArgument(
             name='kinesis_node_name',
@@ -62,13 +74,18 @@ def generate_launch_description():
             value=PythonExpression(["'", LaunchConfiguration('stream_name'), "-", LaunchConfiguration('launch_id'), "'"]),
             condition=IfCondition(PythonExpression(["'true' if '", LaunchConfiguration('launch_id'), "' else 'false'"]))
         ),
+        launch.actions.SetLaunchConfiguration(
+            name='rekognition_data_stream',
+            value=PythonExpression(["'", LaunchConfiguration('rekognition_data_stream'), "-", LaunchConfiguration('launch_id'), "'"]),
+            condition=IfCondition(PythonExpression(["'true' if '", LaunchConfiguration('launch_id'), "' else 'false'"]))
+        ),
         launch.actions.IncludeLaunchDescription(
             launch.launch_description_sources.PythonLaunchDescriptionSource(
                 os.path.join(get_package_share_directory('h264_video_encoder'), 'launch', 'h264_video_encoder_launch.py')
             ),
             launch_arguments={
                 'node_name': launch.substitutions.LaunchConfiguration('h264_node_name'),
-                'config': h264_encoder_config_file_path,
+                'config': h264_encoder_config_file_path, 
                 'image_transport': launch.substitutions.LaunchConfiguration('image_transport'),
             }.items()
         ),
@@ -79,8 +96,10 @@ def generate_launch_description():
             launch_arguments={
                 'node_name': launch.substitutions.LaunchConfiguration('kinesis_node_name'),
                 'config': kvs_config_file_path,
+                'aws_region': launch.substitutions.LaunchConfiguration('aws_region'),
                 'stream_name': launch.substitutions.LaunchConfiguration('stream_name'),
-            }.items(),
+                'rekognition_data_stream': launch.substitutions.LaunchConfiguration('rekognition_data_stream')
+            }.items()
         )
     ]
 

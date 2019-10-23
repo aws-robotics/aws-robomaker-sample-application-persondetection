@@ -31,13 +31,13 @@ def generate_launch_description():
                                        'config', 'cloudwatch_logs_config.yaml')
 
     with open(default_metrics_config, 'r') as f:
-        config_text = f.read()
+      config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
     default_aws_metrics_namespace = config_yaml['cloudwatch_metrics_collector']['ros__parameters']['aws_metrics_namespace']
     default_aws_region = config_yaml['cloudwatch_metrics_collector']['ros__parameters']['aws_client_configuration']['region']
 
     with open(default_logs_config, 'r') as f:
-        config_text = f.read()
+      config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
     default_log_group_name = config_yaml['cloudwatch_logger']['ros__parameters']['log_group_name']
 

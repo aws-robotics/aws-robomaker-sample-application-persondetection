@@ -3,7 +3,6 @@ h264_video_encoder:
   ros__parameters:
     # The name of the topic to which the H264 encoder node should subscribe to obtain the feed desired to be encoded
     # The topic must be a sensor_msgs/Image message
-    #subscription_topic: "/raspicam_node/image"
     subscription_topic: "/camera/image_raw"
 
     # The name of the topic to which H264 encoder node should publish the encoded video stream

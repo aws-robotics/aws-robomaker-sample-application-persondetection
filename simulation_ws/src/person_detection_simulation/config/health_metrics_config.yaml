@@ -1,8 +1,0 @@
-health_metric_collector:
-  ros__parameters:
-    # metrics sampling interval in seconds
-    interval: 5.0
-
-    #Robot Id
-    robot_id: Turtlebot3
-
