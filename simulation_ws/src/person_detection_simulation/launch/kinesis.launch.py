@@ -32,9 +32,18 @@ def generate_launch_description():
         config_text = f.read()
     config_yaml = yaml.safe_load(config_text)
     
+    default_aws_region = config_yaml['kinesis_video_streamer']['ros__parameters']['aws_client_configuration']['region']
     default_stream_name = config_yaml['kinesis_video_streamer']['ros__parameters']['kinesis_video']['stream0']['stream_name']
+    default_rekognition_data_stream = config_yaml['kinesis_video_streamer']['ros__parameters']['kinesis_video']['stream0']['rekognition_data_stream']
+
+    default_aws_region = os.environ.get('ROS_AWS_REGION', default_aws_region)
 
     launch_actions = [
+        launch.actions.DeclareLaunchArgument(
+            name='aws_region',
+            description='AWS region override, defaults to config .yaml if not set',
+            default_value=default_aws_region
+        ),
         launch.actions.DeclareLaunchArgument(
             name='launch_id',
             description='Used for resource name suffix if specified',
@@ -43,6 +52,10 @@ def generate_launch_description():
         launch.actions.DeclareLaunchArgument(
             name='stream_name',
             default_value=default_stream_name
+        ),
+        launch.actions.DeclareLaunchArgument(
+            name='rekognition_data_stream',
+            default_value=default_rekognition_data_stream
         ),
         launch.actions.DeclareLaunchArgument(
             name='kinesis_node_name',
@@ -59,6 +72,11 @@ def generate_launch_description():
         launch.actions.SetLaunchConfiguration(
             name='stream_name',
             value=PythonExpression(["'", LaunchConfiguration('stream_name'), "-", LaunchConfiguration('launch_id'), "'"]),
+            condition=IfCondition(PythonExpression(["'true' if '", LaunchConfiguration('launch_id'), "' else 'false'"]))
+        ),
+        launch.actions.SetLaunchConfiguration(
+            name='rekognition_data_stream',
+            value=PythonExpression(["'", LaunchConfiguration('rekognition_data_stream'), "-", LaunchConfiguration('launch_id'), "'"]),
             condition=IfCondition(PythonExpression(["'true' if '", LaunchConfiguration('launch_id'), "' else 'false'"]))
         ),
         launch.actions.IncludeLaunchDescription(
@@ -78,7 +96,9 @@ def generate_launch_description():
             launch_arguments={
                 'node_name': launch.substitutions.LaunchConfiguration('kinesis_node_name'),
                 'config': kvs_config_file_path,
+                'aws_region': launch.substitutions.LaunchConfiguration('aws_region'),
                 'stream_name': launch.substitutions.LaunchConfiguration('stream_name'),
+                'rekognition_data_stream': launch.substitutions.LaunchConfiguration('rekognition_data_stream')
             }.items()
         )
     ]
