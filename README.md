@@ -117,51 +117,47 @@ colcon build
 Launch the application with the following commands:
 
 - *Running Robot Application on a Robot*
+  Once the bundle has been created, it can be deployed using RoboMaker. For information about deploying using RoboMaker,
+  see [this documentation](https://docs.aws.amazon.com/robomaker/latest/dg/gs-deploy.html). You can follow those instructions
+  to cross-compile the sample application for the ARMHF architecture supported by the Raspberry PI,
+  using a RoboMaker Development environment.
 
-    Once the bundle has been created, it can be deployed using RoboMaker. For information about deploying using RoboMaker, see [this documentation](https://docs.aws.amazon.com/robomaker/latest/dg/gs-deploy.html). You can follow those instructions
-    to cross-compile the sample application for the ARMHF architecture supported by the Raspberry PI, using a RoboMaker
-    Development environment.
+  Support for the Raspberry Pi camera in ROS Dashing on Ubuntu is currently limited. We recommend using a USB webcam instead.
 
-    You must also complete the Raspberry Pi camera setup for the TurtleBot WafflePi, outlined
-    [here](http://emanual.robotis.com/docs/en/platform/turtlebot3/appendix_raspi_cam/#raspberry-pi-camera).
+  Give the ROS nodes permission to the use the camera by running the following command before attempting to start the robot application on the robot:
+  ```bash
+  sudo chmod 666 /dev/video0
+  ```
 
-    You must run the following command before running the Robot Application on the robot.
-    ```bash
-    sudo chmod 666 /dev/video0
-    ```
+  You may also upload and run the bundle manually. Once the bundle has been manually uploaded to the target TurtleBot WafflePi, ssh into the TurtleBot and run:
+  ```bash
+  tar xvf robot_ws_armhf_bundle.tar
+  mkdir dependencies && tar xvzf dependencies.tar.gz -C dependencies
+  mkdir workspace && tar xvzf workspace.tar.gz -C workspace
+  export LAUNCH_ID=YOUR_LAUNCH_ID
+  BUNDLE_CURRENT_PREFIX=$(pwd)/dependencies source $(pwd)/dependencies/setup.sh
+  BUNDLE_CURRENT_PREFIX=$(pwd)/workspace source $(pwd)/workspace/setup.sh
+  ros2 launch person_detection_robot deploy_person_detection.launch.py run_usb_cam:=True
+  ```
 
-    You may also upload and run the bundle manually. Once the bundle has been manually uploaded to the target TurtleBot WafflePi, ssh into the TurtleBot and run
-
-    ```bash
-    tar xvf robot_ws_armhf_bundle.tar
-    mkdir dependencies && tar xvzf dependencies.tar.gz -C dependencies
-    mkdir workspace && tar xvzf workspace.tar.gz -C workspace
-    export LAUNCH_ID=YOUR_LAUNCH_ID
-    BUNDLE_CURRENT_PREFIX=$(pwd)/dependencies source $(pwd)/dependencies/setup.sh
-    BUNDLE_CURRENT_PREFIX=$(pwd)/workspace source $(pwd)/workspace/setup.sh
-    ros2 launch person_detection_robot deploy_person_detection.launch.py
-    ```
-
-    See the [colcon-bundle documentation](https://github.com/colcon/colcon-bundle#bundle-usage) for more details.
-
-    Finally, note the `width` and `height` parameters for the node `raspicam_node` on `deploy_person_detection.launch.py` might require
-    some adjustment depending on the resolution of the specific robot camera.
+  See the [colcon-bundle documentation](https://github.com/colcon/colcon-bundle#bundle-usage) for more details.
 
 - *Running Robot Application Elsewhere*
-    ```bash
-    source robot_ws/install/local_setup.sh
-    ros2 launch person_detection_robot person_detection.launch.py
-    ```
+  ```bash
+  source robot_ws/install/local_setup.sh
+  ros2 launch person_detection_robot person_detection.launch.py
+  ```
 
 - *Running Simulation Application*
-    ```bash
-    source /usr/share/gazebo/setup.sh
-    source simulation_ws/install/local_setup.sh
-    TURTLEBOT3_MODEL=waffle_pi ros2 launch person_detection_simulation [command]
-    ```
-    There are two simulation launch commands:
-    - `small_house.launch.py` - A world with a kitchen, bedroom and living areas. The Turtlebot3 spawned is stationary waiting commands.
-    - `small_house_turtlebot_navigation.launch.py` - A small house with TB3 autonomously navigating to goal points on a route.
+  ```bash
+  source /usr/share/gazebo/setup.sh
+  source simulation_ws/install/local_setup.sh
+  TURTLEBOT3_MODEL=waffle_pi ros2 launch person_detection_simulation [command]
+  ```
+  There are two simulation launch commands:
+  - `small_house.launch.py` - A world with a kitchen, bedroom and living areas. The Turtlebot3 spawned is stationary waiting commands.
+  - `small_house_turtlebot_navigation.launch.py` - A small house with TB3 autonomously navigating to goal points on a route.
+
 
 ## Using this sample with RoboMaker
 
