@@ -85,6 +85,9 @@ Information about configuring AWS credentials can be found here: https://docs-aw
 
 ## Build
 
+### Install requirements
+Follow links above for instructions on installing required software.
+
 ### Pre-build commands
 
 ```bash
